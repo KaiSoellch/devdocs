@@ -186,17 +186,17 @@ So it will basically iterate the CSV and create `Customer` and `Item` nodes and 
 customer to the items he purchased.
 
 ## Having a look at the resulting graph
+<img src="/blog/img/graph_neo.png" alt="Resulting graph graph" style="float: left; margin: 10px;width:300px" />
 Now you can navigate to your neo4j frontend, typically `http://localhost:7474/browser/`. In the query window at the top
 cypher queries can be entered. The query `MATCH (n) RETURN n LIMIT 100`, for example, will print the whole graph:
-
-![](/blog/img/graph_neo.png)
 
 This graphs shows four "purchasing group". The group at the bottom left is Shopware's demo data.
 The other three "purchase groups" are the demo data of this plugin: Each of this groups simulates buying behaviour
 for another topic, e.g. "card and board games", "computer games" and "outdoor games". The groups would be linked in
 reality, for the purpose of debugging and experimenting around, smaller, separated groups seem to be more useful.
 
-A recommendation query might look like this:
+### Getting recommendations for a given customer
+Now let's see, how to give recommendations for a specific customer for his overall buying behaviour:
 
 ```
 // find customer who ordered same items
@@ -233,6 +233,22 @@ Both approaches could be added by having a the frequency calculated like this:
 
 Now the "water fight" game becomes a frequency of 8, the "soccer" game a frequency of 2 - which might reflect the number
 of customers and the number of common items even better.
+
+### Getting recommendations for a given product
+Another example will show, how we can make a general recommendation based on a given product (without knowing the current
+customer):
+```
+MATCH (originalItem:Item {name: 'console game: Racing 2000'})<-[:purchased]-(otherCustomer:Customer)-[:purchased]->(alsoBought:Item)
+WHERE alsoBought <> originalItem
+RETURN alsoBought.itemId, count(alsoBought) as frequency
+ORDER BY frequency DESC
+LIMIT 10
+```
+
+This query will give you an result as this:
+
+![](/blog/img/graph_result_item_reco.png)
+
 
 ## Implement recommendation queries in Shopware
 All existing orders where already exported to neo4j using the export console command of this plugin. Now we just need
