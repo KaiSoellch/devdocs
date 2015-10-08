@@ -684,7 +684,7 @@ Ext.define('Shopware.apps.SwagProduct.model.Product', {
 ```
 The Shopware configuration property `detail` defines which component should be created when the detail window for `Shopware.apps.SwagProduct.model.Product` is requested. Now, the detail window will always look the same in the whole backend.
 
-### Plugin Download - [SwagProduct.zip](/developers-guide/backend-components/basics/swagproduct-201510081333.zip)
+### Plugin Download - [SwagProduct.zip](/exampleplugins/SwagProductBasics.zip)
 
 Congratulations! You have just created your first backend application used the Shopware backend components. The application is completely usable and provides you with all features you can see in other backend applications. You now able to create and edit records, too.
 
