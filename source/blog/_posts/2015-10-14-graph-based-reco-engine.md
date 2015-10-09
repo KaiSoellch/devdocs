@@ -20,13 +20,13 @@ introduction to graph databases and especially [Neo4j](neo4j.com).
 
 Over a long weekend I decided, that trying to implement a recommendation engine
 for Shopware based on Neo4j might be a good start to get into Neo4j and graph
-databases in general. In this blog post I will discuss a graph database (especially neo4j),
+databases in general. In this blog post I will discuss the graph database,
 Shopware's current way to handle recommendations and a simple plugin to implement
 a recommendation engine using neo4j in Shopware.
 
  <div class="toc-list" data-depth="4" data-headline=""></div>
 
-## What is it all about
+## What is it all about?
 <img src="/blog/img/graph_simple_result.png" alt="Simple graph" style="float: left; margin: 10px;width:300px" />
 A graph database is a database which represents information in form of graphs. Its ideal for highly cross-linked
 data which needs to be queried in a semantic way.
@@ -63,6 +63,71 @@ on the right).
 Other examples show how to find all co-actors of Tom Hanks or the shortest relationship path between e.g. Tom Hanks and
 Kevin Bacon (also known as [bacon path](https://en.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon)). So playing around with the movie data
 demo set gives quite a good impression of what is possible with such a graph database.
+
+### The cypher query language
+Cypher is a declarative query language for neo4j. It focuses on being human readable and allowing people to explress *which*
+information they want to read, not *how* the information can be found.
+
+Typical keywords are `MATCH`, `WHERE` and `RETURN`; `MATCH` will usually describe a (sub)graph in the neo4j database,
+`WHERE` adds some additional conditions to the information being queried and `RETURN` defines the data you actually
+want to read.
+
+A typical query might look like this:
+
+```
+MATCH (currentCustomer:Customer {name: "Peter"})-[:purchased]->(purchasedItems:Item)
+RETURN purchasedItems
+```
+
+Re-formatting the query a bit makes understanding it even easier:
+
+```
+MATCH
+    (currentCustomer:Customer {name: "Peter"})
+    -[:purchased]->
+    (purchasedItems:Item)
+RETURN purchasedItems
+```
+
+First of all there is the `MATCH` statement which describes the relation we want to find:
+
+* find a node of type `Customer` with `name="Peter"` and assign the alias `currentCustomer`
+* from this node find all edges / relations of type `purchased`
+* the edge should point to another node of type `Item` with the alias `purchasedItems`
+* return all `purchasedItems`
+
+The statement `-[:purchased]->` is kind of a ASCII representation of the relation you want to describe, so its
+very easy to read and to understand. The `MATCH` query does not need to have three parts, you can extend it to
+you needs:
+
+```
+MATCH
+    (currentCustomer:Customer {name: "Peter"})
+    -[:purchased]->
+    (purchasedItems:Item)
+    <-[:purchased]-
+    (otherCustomer:Customer)
+RETURN otherCustomer
+```
+
+In this case we added another edge `purchased` and another node `Customer` called `otherCustomer`. The arrow now points
+into the other direction, so that it goes from `otherCustomer` towards `purchasedItems`, but there are also bidirectional
+edges, if that fits your need more.
+
+### More advanced queries
+Of course this is only a small part of the functionality of the cypher query language; it also supports updating and
+deleting graphs / nodes / edges, importing CSV, prepared statements and various functions. I highly recommend the
+[neo4j documentation](http://neo4j.com/docs/stable/cypher-query-lang.html) which provides some good examples and explanations
+and even an interactive query editor / graph browser.
+
+### PHP integration
+Neo4j has a REST API, so that it is easy to communicate witht the server. Of course in most cases you don't want to take
+care of that by yourselves; some general words about some PHP integrations can also be found in the
+[php section](http://neo4j.com/developer/php/) of the neo4j wiki, the most popular libraries seem to be
+[neo4j php](https://github.com/jadell/neo4jphp) by Josh Adell and [](https://github.com/lphuberdeau/Neo4j-PHP-OGM)
+by Louis-Philippe Huberdeau. The first one is a simple OOP library to create cypher queries, the latter is a
+doctrine2 style OGM (object graph mapper) which is build on top of the neo4jphp library.
+
 
 ## The current situation in Shopware
 Currently the so called "Marketing aggregate" components of Shopware take care
@@ -421,3 +486,7 @@ a *full export* to neo4j, an *update query for new orders* and the *recommendati
 Of course there are a lot of optimizations, to talk about. So currently the recommendation query will take into account
 *all* ordered items of other customers, not only items also bought in the *same* order. Also checks for the subshop or even
 the customer groups might be useful.
+
+### Download
+The [plugin is available on github](https://github.com/dnoegel/DsnRecommendation), install instructions can be found
+above or in the github repository.
