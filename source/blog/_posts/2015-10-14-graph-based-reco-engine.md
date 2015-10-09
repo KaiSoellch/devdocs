@@ -297,7 +297,7 @@ So basically there are two paths to "water fight" and one path to "soccer" for F
 Currently the `frequency` is calculated by the number of customers, how bought the same product as Felix. This could
 be changed to also take the number of similar items into account: `count(u2) as frequency`
 With this modification, the "water fight" game would get a frequency of 4, as every actual path is taken into account.
-Both approaches could be added by having a the frequency calculated like this:
+Both approaches could be combined by having a the frequency calculated like this:
 
 `count(u2) * count(DISTINCT u2) as frequency`
 
@@ -325,11 +325,11 @@ The result will look like this:
 ![](/blog/img/graph_result_item_reco.png)
 
 ### Implement recommendation queries in Shopware
-The following sections will briefly discuss, how the `DsnRecommendation` plugin does work
+The following sections will briefly discuss, how the plugin does work
 #### Syncing new orders to neo4j
 All existing orders where already exported to neo4j using the export console command of this plugin. Now we just need
 to make sure, that new orders will also be syncronized to the graph database.
-For this we add a little order subscriber like this:
+To do so, we add a little order subscriber like this:
 
 ```
 class Order implements \Enlight\Event\SubscriberInterface
