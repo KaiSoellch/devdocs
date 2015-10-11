@@ -38,7 +38,7 @@ of an item.
 *customer* and *items* as nodes, one might have *edges* like "purchased". This way one could design a graph with all
 *items* all *customers* purchased.
 
-Graph databases are popular everywhere where meaninful information should be extracted from such kind of information
+Graph databases are popular everywhere where meaningful information should be extracted from such kind of information
 network. Popular examples are recommendation engines for e.g. products, movies or even friends in social networks.
 Even though it is possible to represent such structures in relational databases, graph databases are actually made
 for this kind of requirement and might be prefarable in regards of performance and maintainability.
@@ -114,11 +114,15 @@ In this case we added another edge `purchased` and another node `Customer` calle
 into the other direction, so that it goes from `otherCustomer` towards `purchasedItems`, but there are also bidirectional
 edges, if that fits your need more.
 
-### More advanced queries
+### More on Cypher & Co
 Of course this is only a small part of the functionality of the cypher query language; it also supports updating and
 deleting graphs / nodes / edges, importing CSV, prepared statements and various functions. I highly recommend the
 [neo4j documentation](http://neo4j.com/docs/stable/cypher-query-lang.html) which provides some good examples and explanations
 and even an interactive query editor / graph browser.
+
+Additionally there are [ebooks on the neo4j homepage](http://neo4j.com/books/) you can download leaving your contact data.
+They will give a deeper insight of graph databases in general and ways to design graphes properly.
+
 
 ### PHP integration
 Neo4j has a REST API, so that it is easy to communicate witht the server. Of course in most cases you don't want to take
