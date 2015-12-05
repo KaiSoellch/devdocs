@@ -49,7 +49,7 @@ indexed: false
 
 | Field               | Type                  | Original object                                 |
 |---------------------|-----------------------|-------------------------------------------------|
-| number       		  | string                |                                                 |
+| number (required)   | string                |                                                 |
 | supplierNumber      | string                |                                                 |
 | additionalText      | string                |                                                 |
 | weight              | string                |                                                 |
@@ -62,11 +62,11 @@ indexed: false
 | referenceUnit       | string                |                                                 |
 | packUnit            | string                |                                                 |
 | shippingTime        | string                |                                                 |
-| prices              | object array          | **[Price](#price)** 							|
+| prices              | object array          | **[Price](#price)** 							              |
 | configuratorOptions | object array          | **[ConfiguratorOption](#configurator-option)**  |
-| attribute           | object                | **[Attribute](#article-attribute)** 			|
+| attribute           | object                | **[Attribute](#article-attribute)** 			      |
 | id                  | integer (primary key) |                                                 |
-| articleId           | integer (foreign key) | **[Article](../api-resource-article/)**          |
+| articleId           | integer (foreign key) | **[Article](../api-resource-article/)**         |
 | unitId              | integer (foreign key) |                                                 |
 | kind                | integer               |                                                 |
 | inStock             | integer               |                                                 |
